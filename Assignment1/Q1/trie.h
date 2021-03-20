@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
-#define MAXC 128
+#define MAXC 36
 
 typedef struct TrieNode
 {
@@ -14,5 +15,5 @@ typedef struct TrieNode
 
 TrieNode *getNode();
 void insert(TrieNode *root, const char *key, const int index);
-bool search(struct TrieNode *root, const char *key, const int length);
 TrieNode *next_node(struct TrieNode *node, const char ch);
+int get_child_index(char ch);

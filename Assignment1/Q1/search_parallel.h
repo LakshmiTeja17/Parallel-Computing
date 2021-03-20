@@ -1,8 +1,7 @@
-#include <ctype.h>
 #include <mpi.h>
 #include "trie.h"
 
-#define MAX_LINE_SIZE 10000
+#define MAX_LINE_SIZE 5000
 
 typedef struct LineInfo
 {

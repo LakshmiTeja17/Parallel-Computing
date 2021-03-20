@@ -17,32 +17,31 @@ void insert(TrieNode *root, const char *key, const int index)
     int i;
     for (i = 0; key[i] != '\0'; i++)
     {
-        if (!temp->children[key[i]])
-            temp->children[key[i]] = getNode();
+        int ch = get_child_index(key[i]);
+        if (!temp->children[ch])
+            temp->children[ch] = getNode();
 
-        temp = temp->children[key[i]];
+        temp = temp->children[ch];
     }
     temp->end_index = index;
     temp->length = i;
 }
 
-bool search(struct TrieNode *root, const char *key, const int length)
-{
-    TrieNode *temp = root;
-
-    for (int i = 0; key[i] != '\0'; i++)
-    {
-        if (!temp->children[key[i]])
-            return false;
-        temp = temp->children[key[i]];
-    }
-
-    return (!temp && (temp->end_index >= 0));
-}
-
 TrieNode *next_node(struct TrieNode *node, const char ch)
 {
-    if (!node || !(node->children[ch]))
+    int ind = get_child_index(ch);
+    if (!node)
         return NULL;
-    return node->children[ch];
+    return node->children[ind];
+}
+
+int get_child_index(char ch)
+{
+    int ind;
+    if (isalpha(ch))
+        ind = tolower(ch) - 'a';
+    else if (isdigit(ch))
+        ind = ch - '0' + 26;
+
+    return ind;
 }
