@@ -54,15 +54,11 @@ void find_words(TrieNode *root, int num_words, bool is_and, char *chunk, long lo
 	if (lsize <= 0)
 		lsize = 1;
 	int wsize = 3 * lsize;
-	//printf("%d: %d %d\n", rank, lsize, wsize);
 	LineInfo *lines = (LineInfo *)malloc(lsize * sizeof(LineInfo));
 	WordInfo *words = (WordInfo *)malloc(wsize * sizeof(WordInfo));
-	//printf("%d: Allocated\n", rank);
 
 	for (long long int i = locstart; i <= locend; i++)
 	{
-		if (line_ptr >= MAX_LINE_SIZE)
-			printf("line_ptr!!\n");
 		ltemp.line[line_ptr++] = chunk[i];
 
 		if (isalnum(chunk[i]))
@@ -84,7 +80,6 @@ void find_words(TrieNode *root, int num_words, bool is_and, char *chunk, long lo
 				words[wcount++] = wtemp;
 				if (wcount >= wsize)
 				{
-					printf("2 %d: %d %d\n", rank, lsize, wsize);
 					wsize *= 2;
 					words = (WordInfo *)realloc(words, wsize * sizeof(WordInfo));
 				}
@@ -111,7 +106,6 @@ void find_words(TrieNode *root, int num_words, bool is_and, char *chunk, long lo
 				lines[lcount++] = ltemp;
 				if (lcount >= lsize)
 				{
-					printf("1 %d: %d %d\n", rank, lsize, wsize);
 					lsize *= 2;
 					lines = (LineInfo *)realloc(lines, lsize * sizeof(LineInfo));
 				}
