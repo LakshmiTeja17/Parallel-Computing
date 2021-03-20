@@ -249,9 +249,9 @@ int main(int argc, char **argv)
 	t2 = MPI_Wtime();
 	double time = t2 - t1;
 	MPI_Reduce(&time, &final_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-	if (rank == 0)
+	if (rank == 0 && !strcmp(argv[3], "y"))
 	{
-		printf("\n\nTime in seconds: %lf\n", final_time);
+		printf("Time in seconds: %lf\n", final_time);
 	}
 
 	MPI_File_close(&file);
