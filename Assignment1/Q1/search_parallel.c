@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 
 	MPI_File file;
 	int rank, nproc;
-	double t1, t2, final_time;
+	double t1, t2, t3, final_time1, final_time2;
 
 	MPI_Init(&argc, &argv);
 
@@ -243,15 +243,23 @@ int main(int argc, char **argv)
 	int lcount, wcount, num_lines;
 	find_words(root, argc - 4, is_and, chunk, locstart, locend, rank, &lines, &lcount, &words, &wcount, &num_lines);
 
+	MPI_Barrier(MPI_COMM_WORLD);
+	t2 = MPI_Wtime();
+
 	print_results(lines, lcount, words, wcount, argv, num_lines, line_info, word_info, rank, nproc, argv[3]);
 
 	MPI_Barrier(MPI_COMM_WORLD);
-	t2 = MPI_Wtime();
-	double time = t2 - t1;
-	MPI_Reduce(&time, &final_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+	t3 = MPI_Wtime();
+
+	double time1 = t2 - t1;
+	double time2 = t3 - t2;
+	MPI_Reduce(&time1, &final_time1, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+	MPI_Reduce(&time2, &final_time2, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 	if (rank == 0 && !strcmp(argv[3], "y"))
 	{
-		printf("Time in seconds: %lf\n", final_time);
+		printf("Time in seconds for searching the lines: %lf\n", final_time1);
+		printf("Time in seconds for collaborating the results in process 0 :%lf\n", final_time2);
+		printf("Total time: %lf\n", final_time1 + final_time2);
 	}
 
 	MPI_File_close(&file);
